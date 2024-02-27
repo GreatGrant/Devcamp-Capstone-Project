@@ -29,9 +29,24 @@ class DetailsScreen extends StatelessWidget {
               itemCount: repositories?.length ?? 0,
               itemBuilder: (context, index) {
                 GitHubRepository? repository = repositories?[index];
-                return ListTile(
-                  title: Text(repository?.name ?? ''),
-                  subtitle: Text(repository?.description ?? ''),
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                  child: Card(
+                    elevation: 4.0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12.0),
+                    ),
+                    child: ListTile(
+                      title: Text(
+                        repository?.name ?? '',
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      subtitle: Text(repository?.description ?? ''),
+                      onTap: () {
+                        // Add your onTap logic here
+                      },
+                    ),
+                  ),
                 );
               },
             );
