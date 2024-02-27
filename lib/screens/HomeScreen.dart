@@ -1,43 +1,66 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../models/user.dart';
-import '../services/api_service.dart';
+
+import '../models/github_models.dart';
+import '../services/github_service.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late List<User> users;
+  final TextEditingController _searchController = TextEditingController();
+  List<GitHubUser> _users = [];
 
   @override
   void initState() {
     super.initState();
-    ApiService.fetchUsers().then((fetchedUsers) {
+    _searchUsers('');
+  }
+
+  void _searchUsers(String query) async {
+    try {
+      List<GitHubUser> users = await GitHubService.searchUsers(query);
       setState(() {
-        users = fetchedUsers;
+        _users = users;
       });
-    });
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error: $e');
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('User List')),
-      body: users == null
-          ? const Center(child: CircularProgressIndicator())
-          : ListView.builder(
-        itemCount: users.length,
+      appBar: AppBar(
+        title: TextField(
+          controller: _searchController,
+          decoration: const InputDecoration(
+            hintText: 'Search GitHub users',
+            prefixIcon: Icon(Icons.search),
+          ),
+          onChanged: _searchUsers,
+        ),
+      ),
+      body: ListView.builder(
+        itemCount: _users.length,
         itemBuilder: (context, index) {
-          final user = users[index];
+          GitHubUser user = _users[index];
           return ListTile(
-            title: Text(user.name),
-            subtitle: Text(user.email),
+            title: Text(user.login),
             onTap: () {
-              GoRouter.of(context).go('/details', extra: {'userId': user.id.toString()});
+              final encodedAvatarUrl = Uri.encodeComponent(user.avatarUrl);
+              final encodedUrl = Uri.encodeComponent(user.url);
+              GoRouter.of(context).go(
+                '/details/${user.login}/${user.id}/$encodedAvatarUrl/$encodedUrl',
+              );
             },
           );
         },
@@ -45,3 +68,4 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+
