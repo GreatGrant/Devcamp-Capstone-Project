@@ -22,46 +22,51 @@ class RepositoryDetailsScreen extends StatelessWidget {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (snapshot.hasData) {
             final repository = snapshot.data!;
-            return SingleChildScrollView( // Allow scrolling for long descriptions
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Repository name with prominent style
-                  Text(
-                    repository.name,
-                    style: Theme.of(context).textTheme.headlineSmall!.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  // Owner information with avatar
-                  Row(
-                    children: [
-                      Text(
-                        'Owned by ${repository.fullName}',
-                        style: const TextStyle(fontSize: 16),
+            return Center( // Center the content vertically and horizontally
+              child: SingleChildScrollView( // Allow scrolling for long descriptions
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Repository name with prominent style
+                    Text(
+                      repository.name,
+                      style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue, // Custom color for the repository name
                       ),
-                    ],
-                  ),
-                  const Divider(thickness: 1),
-                  const SizedBox(height: 10),
-                  // Description with optional formatting
-                  Text.rich(
-                    TextSpan(
-                      children: [
-                        const TextSpan(
-                          text: 'Description: ',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        TextSpan(
-                          text: repository.description ?? 'No description',
-                          style: const TextStyle(fontSize: 16),
-                        ),
-                      ],
+                      textAlign: TextAlign.center,
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 20),
+                    // Owner information with avatar
+                    CircleAvatar(
+                      radius: 40,
+                      backgroundImage: NetworkImage(repository.imageUrl),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      'Owned by ${repository.name}',
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                    const Divider(thickness: 1),
+                    const SizedBox(height: 20),
+                    // Description with optional formatting
+                    Text.rich(
+                      TextSpan(
+                        children: [
+                          const TextSpan(
+                            text: 'Description: ',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          TextSpan(
+                            text: repository.description ?? 'No description',
+                            style: const TextStyle(fontSize: 16),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             );
           } else {
