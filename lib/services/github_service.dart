@@ -43,4 +43,15 @@ class GitHubService {
       throw Exception('Failed to load repositories');
     }
   }
+
+  static Future<GitHubRepository> fetchRepositoryDetails(int repositoryId) async {
+    final response = await http.get(Uri.parse('$BASE_URL/repositories/$repositoryId'));
+    if (response.statusCode == 200) {
+      final dynamic responseData = jsonDecode(response.body);
+      return GitHubRepository.fromJson(responseData);
+    } else {
+      throw Exception('Failed to load repository details');
+    }
+  }
+
 }

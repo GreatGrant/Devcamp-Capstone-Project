@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../models/github_models.dart';
 import '../models/github_repository.dart';
 import '../services/github_service.dart';
@@ -43,7 +44,7 @@ class DetailsScreen extends StatelessWidget {
                       ),
                       subtitle: Text(repository?.description ?? ''),
                       onTap: () {
-                        // Add your onTap logic here
+                        GoRouter.of(context).go('/repository-details/${repository?.id}');
                       },
                     ),
                   ),
