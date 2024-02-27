@@ -3,7 +3,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../models/github_models.dart';
-import '../services/github_service.dart'; // Import GitHubService from the correct location
+import '../services/github_service.dart';
+import '../themes.dart'; // Import GitHubService from the correct location
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -53,7 +54,8 @@ class _HomeScreenState extends State<HomeScreen> {
         itemBuilder: (context, index) {
           GitHubUser user = _users[index];
           return Card(
-            color: index % 2 == 0 ? Colors.blue : Colors.green,
+            color: index % 2 == 0 ? AppTheme.customTheme.primaryColor
+              : AppTheme.customTheme.hintColor,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15.0),
             ),
@@ -61,7 +63,10 @@ class _HomeScreenState extends State<HomeScreen> {
               leading: CircleAvatar(
                 backgroundImage: CachedNetworkImageProvider(user.avatarUrl),
               ),
-              title: Text(user.login),
+              title: Text(
+                user.login,
+                style: AppTheme.customTheme.textTheme.displayLarge,
+              ),
               onTap: () {
                 final encodedAvatarUrl = Uri.encodeComponent(user.avatarUrl);
                 final encodedUrl = Uri.encodeComponent(user.url);

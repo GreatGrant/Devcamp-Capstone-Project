@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 class AppTheme {
   static ThemeData customTheme = ThemeData(
-    //  primary and accent colors
+    // Primary and accent colors
     primaryColor: Colors.blue,
+    hintColor: Colors.green,
 
     // app's typography
     textTheme: const TextTheme(
